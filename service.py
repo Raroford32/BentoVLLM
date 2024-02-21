@@ -14,6 +14,7 @@ PROMPT_TEMPLATE = """<start_of_turn>user
 
 
 @bentoml.service(
+    name="gemma-7b-vllm",
     traffic={
         "timeout": 300,
     },
