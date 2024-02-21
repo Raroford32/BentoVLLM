@@ -6,7 +6,5 @@ include:
   - '*.py'
 python:
   requirements_txt: './requirements.txt'
-  wheels:
-    - ./vllm-0.3.2+cu118-cp39-cp39-manylinux1_x86_64.whl
 envs:
   - name: HF_TOKEN
