@@ -7,13 +7,10 @@ from typing_extensions import Annotated
 
 
 MAX_TOKENS = 1024
-PROMPT_TEMPLATE = """<s>[INST] <<SYS>>
-You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe. Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Please ensure that your responses are socially unbiased and positive in nature.
-
-If a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. If you don't know the answer to a question, please don't share false information.
-<</SYS>>
-
-{user_prompt} [/INST] """
+PROMPT_TEMPLATE = """<start_of_turn>user
+{user_prompt}<end_of_turn>
+<start_of_turn>model
+"""
 
 
 @bentoml.service(
@@ -28,13 +25,7 @@ If a question does not make any sense, or is not factually coherent, explain why
 class VLLM:
     def __init__(self) -> None:
         from vllm import AsyncEngineArgs, AsyncLLMEngine
-
-        ENGINE_ARGS = AsyncEngineArgs(
-            model='meta-llama/Llama-2-7b-chat-hf',
-            max_model_len=MAX_TOKENS
-        )
-        
-        self.engine = AsyncLLMEngine.from_engine_args(ENGINE_ARGS)
+        self.engine = AsyncLLMEngine.from_engine_args(AsyncEngineArgs(model='google/gemma-7b-it', max_model_len=MAX_TOKENS))
 
     @bentoml.api
     async def generate(
@@ -44,9 +35,8 @@ class VLLM:
     ) -> AsyncGenerator[str, None]:
         from vllm import SamplingParams
 
-        SAMPLING_PARAM = SamplingParams(max_tokens=max_tokens)
         prompt = PROMPT_TEMPLATE.format(user_prompt=prompt)
-        stream = await self.engine.add_request(uuid.uuid4().hex, prompt, SAMPLING_PARAM)
+        stream = await self.engine.add_request(uuid.uuid4().hex, prompt, SamplingParams(max_tokens=max_tokens))
 
         cursor = 0
         async for request_output in stream:
