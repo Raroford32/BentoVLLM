@@ -21,7 +21,7 @@ PROMPT_TEMPLATE = """<|begin_of_text|><|start_header_id|>system<|end_header_id|>
 
 """
 
-MODEL_ID = "hugging-quants/Meta-Llama-3.1-70B-Instruct-AWQ-INT4"
+MODEL_ID = "mlabonne/Hermes-3-Llama-3.1-70B-lorablated"
 
 
 @openai_endpoints(
