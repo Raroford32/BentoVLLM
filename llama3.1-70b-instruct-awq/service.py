@@ -21,7 +21,7 @@ PROMPT_TEMPLATE = """<|begin_of_text|><|start_header_id|>system<|end_header_id|>
 
 """
 
-MODEL_ID = "hugging-quants/Meta-Llama-3.1-70B-Instruct-AWQ-INT4"
+MODEL_ID = "mlabonne/Hermes-3-Llama-3.1-70B-lorablated"
 
 
 @openai_endpoints(
@@ -29,7 +29,7 @@ MODEL_ID = "hugging-quants/Meta-Llama-3.1-70B-Instruct-AWQ-INT4"
     default_chat_completion_parameters=dict(stop=["<|eot_id|>"]),
 )
 @bentoml.service(
-    name="bentovllm-llama3.1-70b-instruct-awq-service",
+    name="mlabonne/Hermes-3-Llama-3.1-70B-lorablated",
     traffic={
         "timeout": 1200,
         "concurrency": 256,  # Matches the default max_num_seqs in the VLLM engine
